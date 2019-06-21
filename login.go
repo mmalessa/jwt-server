@@ -1,14 +1,12 @@
 package main
 
 import (
-	//...
-	// import the jwt-go library
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	//...
 )
 
 // Create the JWT key used to create the signature
@@ -76,11 +74,13 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	fmt.Fprint(w, tokenString)
+
 	// Finally, we set the client cookie for "token" as the JWT we just generated
 	// we also set an expiry time which is the same as the token itself
-	http.SetCookie(w, &http.Cookie{
-		Name:    "token",
-		Value:   tokenString,
-		Expires: expirationTime,
-	})
+	// http.SetCookie(w, &http.Cookie{
+	// 	Name:    "token",
+	// 	Value:   tokenString,
+	// 	Expires: expirationTime,
+	// })
 }

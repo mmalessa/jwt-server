@@ -8,6 +8,10 @@ import (
 )
 
 func Welcome(w http.ResponseWriter, r *http.Request) {
+
+	// FIXME - get token from head -> bearer
+	return
+
 	// We can obtain the session token from the requests cookies, which come with every request
 	c, err := r.Cookie("token")
 	if err != nil {

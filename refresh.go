@@ -8,6 +8,10 @@ import (
 )
 
 func Refresh(w http.ResponseWriter, r *http.Request) {
+
+	// FIXME (header, bearer)
+	return
+
 	// (BEGIN) The code uptil this point is the same as the first part of the `Welcome` route
 	c, err := r.Cookie("token")
 	if err != nil {
