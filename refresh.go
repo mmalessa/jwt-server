@@ -39,18 +39,9 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Println(err)
+		log.Println(err)
 		return
 	}
-
-	// We ensure that a new token is not issued until enough time has elapsed
-	// In this case, a new token will only be issued if the old token is within
-	// 30 seconds of expiry. Otherwise, return a bad request status
-	// if time.Unix(claims.ExpiresAt, 0).Sub(time.Now()) > 30*time.Second {
-	// 	w.WriteHeader(http.StatusBadRequest)
-	// 	fmt.Println("Time error")
-	// 	return
-	// }
 
 	// Now, create a new token for the current use, with a renewed expiration time
 	expiresAtTime := time.Now().Add(time.Duration(cfg.Jwt.ExpirationTime) * time.Minute)
@@ -64,4 +55,5 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Fprint(w, newTokenString)
+	log.Printf("REFRESH: Token expires at: %s\n", time.Unix(claims.ExpiresAt, 0))
 }

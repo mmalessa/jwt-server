@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -53,4 +54,5 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Fprint(w, tokenString)
+	log.Printf("LOGIN:   Token expires at: %s\n", time.Unix(claims.ExpiresAt, 0))
 }

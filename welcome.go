@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
 )
@@ -44,5 +45,5 @@ func Welcome(w http.ResponseWriter, r *http.Request) {
 	// Finally, return the welcome message to the user, along with their
 	// username given in the token
 	w.Write([]byte(fmt.Sprintf("Welcome %s!", claims.Username)))
-	fmt.Printf("Token expires at: %d\n", claims.ExpiresAt)
+	log.Printf("WELCOME: Token expires at: %s\n", time.Unix(claims.ExpiresAt, 0))
 }
