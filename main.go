@@ -26,14 +26,15 @@ type Claims struct {
 
 var cfg Config
 
-// var jwtKey []byte
-var jwtKey = []byte("my_secret_key")
+var jwtKey []byte
+
+// var jwtKey = []byte("my_secret_key")
 
 func main() {
 
 	cfg = *loadConfig("config.yaml")
 
-	// jwtKey = []byte(cfg.Jwt.Key)
+	jwtKey = []byte(cfg.Jwt.Key)
 	http.HandleFunc("/login", Login)
 	http.HandleFunc("/welcome", Welcome)
 	http.HandleFunc("/refresh", Refresh)
