@@ -5,7 +5,12 @@ import (
 	"net/http"
 )
 
+var cfg Config
+
 func main() {
+
+	cfg = *loadConfig("config.yaml")
+
 	http.HandleFunc("/login", Login)
 	http.HandleFunc("/welcome", Welcome)
 	http.HandleFunc("/refresh", Refresh)

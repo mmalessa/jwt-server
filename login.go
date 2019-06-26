@@ -9,16 +9,10 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-// Create the JWT key used to create the signature
-var jwtKey = []byte("my_secret_key")
-
-var users = map[string]string{
-	"user1": "password1",
-	"user2": "password2",
-}
+var jwtKey = []byte(cfg.Jwt.Key)
 
 // Create a struct to read the username and password from the request body
-type Credentials struct {
+type JsonCredentials struct {
 	Password string `json:"password"`
 	Username string `json:"username"`
 }
@@ -32,9 +26,9 @@ type Claims struct {
 
 // Create the Signin handler
 func Login(w http.ResponseWriter, r *http.Request) {
-	var creds Credentials
+	var credentials JsonCredentials
 	// Get the JSON body and decode into credentials
-	err := json.NewDecoder(r.Body).Decode(&creds)
+	err := json.NewDecoder(r.Body).Decode(&credentials)
 	if err != nil {
 		// If the structure of the body is wrong, return an HTTP error
 		w.WriteHeader(http.StatusBadRequest)
@@ -42,22 +36,22 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Get the expected password from our in memory map
-	expectedPassword, ok := users[creds.Username]
+	expectedPassword, ok := cfg.Credentials[credentials.Username]
 
 	// If a password exists for the given user
 	// AND, if it is the same as the password we received, the we can move ahead
 	// if NOT, then we return an "Unauthorized" status
-	if !ok || expectedPassword != creds.Password {
+	if !ok || expectedPassword != credentials.Password {
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 
 	// Declare the expiration time of the token
 	// here, we have kept it as 5 minutes
-	expirationTime := time.Now().Add(5 * time.Minute)
+	expirationTime := time.Now().Add(time.Duration(cfg.Jwt.ExpirationTime) * time.Minute)
 	// Create the JWT claims, which includes the username and expiry time
 	claims := &Claims{
-		Username: creds.Username,
+		Username: credentials.Username,
 		StandardClaims: jwt.StandardClaims{
 			// In JWT, the expiry time is expressed as unix milliseconds
 			ExpiresAt: expirationTime.Unix(),
