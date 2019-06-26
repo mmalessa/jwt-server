@@ -1,6 +1,6 @@
 jwt: 
     key: mySecretKey
-    expirationTime: 5
+    expirationtime: 5
 credentials:
     username1: password1
     username2: password2

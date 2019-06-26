@@ -9,21 +9,6 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-var jwtKey = []byte(cfg.Jwt.Key)
-
-// Create a struct to read the username and password from the request body
-type JsonCredentials struct {
-	Password string `json:"password"`
-	Username string `json:"username"`
-}
-
-// Create a struct that will be encoded to a JWT.
-// We add jwt.StandardClaims as an embedded type, to provide fields like expiry time
-type Claims struct {
-	Username string `json:"username"`
-	jwt.StandardClaims
-}
-
 // Create the Signin handler
 func Login(w http.ResponseWriter, r *http.Request) {
 	var credentials JsonCredentials
@@ -48,13 +33,13 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	// Declare the expiration time of the token
 	// here, we have kept it as 5 minutes
-	expirationTime := time.Now().Add(time.Duration(cfg.Jwt.ExpirationTime) * time.Minute)
+	expiresAtTime := time.Now().Add(time.Duration(cfg.Jwt.ExpirationTime) * time.Minute)
 	// Create the JWT claims, which includes the username and expiry time
 	claims := &Claims{
 		Username: credentials.Username,
 		StandardClaims: jwt.StandardClaims{
 			// In JWT, the expiry time is expressed as unix milliseconds
-			ExpiresAt: expirationTime.Unix(),
+			ExpiresAt: expiresAtTime.Unix(),
 		},
 	}
 
@@ -67,14 +52,5 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-
 	fmt.Fprint(w, tokenString)
-
-	// Finally, we set the client cookie for "token" as the JWT we just generated
-	// we also set an expiry time which is the same as the token itself
-	// http.SetCookie(w, &http.Cookie{
-	// 	Name:    "token",
-	// 	Value:   tokenString,
-	// 	Expires: expirationTime,
-	// })
 }
