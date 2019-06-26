@@ -8,6 +8,9 @@ import (
 )
 
 type Config struct {
+	Server struct {
+		Port int
+	}
 	Jwt struct {
 		Key            string
 		ExpirationTime int
