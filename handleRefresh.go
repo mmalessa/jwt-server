@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -66,5 +67,5 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 
 	// w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	fmt.Fprint(w, newTokenString)
-	// log.Printf("REFRESH: Token expires at: %s\n", time.Unix(claims.ExpiresAt, 0))
+	log.Printf("REFRESH: (%s) Token expires at: %s\n", claims.Username, time.Unix(claims.ExpiresAt, 0))
 }

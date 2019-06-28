@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/dgrijalva/jwt-go"
 )
@@ -23,14 +24,25 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-var cfg Config
+var cfg *Config
+var err error
 var jwtKey []byte
 
 func main() {
 
 	log.Println("Starting JWT Test Server")
-	cfg = *loadConfig("config.yaml")
-	log.Println(fmt.Sprintf("Server port:%d\n", cfg.Server.Port))
+
+	configFile := "config.yaml"
+	if len(os.Args) > 1 {
+		configFile = os.Args[1]
+	}
+	cfg, err = loadConfig(configFile)
+	if err != nil {
+		log.Println(fmt.Sprintf("ERROR: %v", err))
+		return
+	}
+
+	log.Println(fmt.Sprintf("Server port:%d", cfg.Server.Port))
 
 	jwtKey = []byte(cfg.Jwt.Key)
 	http.HandleFunc("/login", Login)

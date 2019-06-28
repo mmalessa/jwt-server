@@ -1,8 +1,21 @@
 # jwt-test-server
 Simple JWT Server made to understand how JWT works.  
+By https://github.com/mmalessa  
+
 Inspired by https://github.com/sohamkamani/jwt-go-example
 
 **`In a production environment, use it only at your own risk!`**  
+
+# Installation
+```sh
+go get github.com/mmalessa/jwt-test-server
+go install github.com/mmalessa/jwt-test-server
+```
+
+# Run
+```sh
+~/go/bin/jwt-test-server /path/to/config/file.yaml
+```
 
 # Configuration
 All you need is in config.yaml

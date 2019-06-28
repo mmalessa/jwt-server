@@ -1,8 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
-	"log"
+	"os"
 
 	"gopkg.in/yaml.v2"
 )
@@ -18,18 +19,38 @@ type Config struct {
 	Credentials map[string]string
 }
 
-func loadConfig(location string) *Config {
+func loadConfig(location string) (*Config, error) {
+
+	cfg := &Config{}
+	_, err := os.Stat(location)
+
+	if os.IsNotExist(err) {
+		return cfg, fmt.Errorf("Config file not found: %s", location)
+	}
 
 	yamlFile, err := ioutil.ReadFile(location)
 	if err != nil {
-		log.Printf("Load config ERROR  #%v ", err)
+		return cfg, fmt.Errorf("Load config error %v ", err)
 	}
 
-	cfg := &Config{}
 	err = yaml.Unmarshal(yamlFile, cfg)
 	if err != nil {
-		log.Printf("Unmarshal ERROR: %v", err)
+		return cfg, fmt.Errorf("Unmarshal: %v", err)
 	}
 
-	return cfg
+	if cfg.Server.Port == 0 {
+		return cfg, fmt.Errorf("No cfg.Server.Port value")
+
+	}
+	if cfg.Jwt.ExpirationTime == 0 {
+		return cfg, fmt.Errorf("No cfg.Jwt.ExpirationTime value")
+	}
+	if cfg.Jwt.Key == "" {
+		return cfg, fmt.Errorf("No cfg.Jwt.Key value")
+	}
+	if len(cfg.Credentials) < 1 {
+		return cfg, fmt.Errorf("No cfg.Credentials")
+	}
+
+	return cfg, err
 }

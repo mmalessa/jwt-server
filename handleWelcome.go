@@ -3,8 +3,10 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
 )
@@ -51,5 +53,5 @@ func Welcome(w http.ResponseWriter, r *http.Request) {
 
 	// w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	fmt.Fprint(w, fmt.Sprintf("Welcome %s!", claims.Username))
-	// log.Printf("WELCOME: Token expires at: %s\n", time.Unix(claims.ExpiresAt, 0))
+	log.Printf("WELCOME: (%s) Token expires at: %s\n", claims.Username, time.Unix(claims.ExpiresAt, 0))
 }
