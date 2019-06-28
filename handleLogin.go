@@ -10,7 +10,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-func Login(w http.ResponseWriter, r *http.Request) {
+func handleLogin(w http.ResponseWriter, r *http.Request) {
 	var credentials JsonCredentials
 	err := json.NewDecoder(r.Body).Decode(&credentials)
 	if err != nil {

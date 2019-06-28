@@ -11,7 +11,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-func Refresh(w http.ResponseWriter, r *http.Request) {
+func handleRefresh(w http.ResponseWriter, r *http.Request) {
 
 	auth := r.Header.Get("Authorization")
 	if auth == "" {

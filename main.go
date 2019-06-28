@@ -45,9 +45,9 @@ func main() {
 	log.Println(fmt.Sprintf("Server port:%d", cfg.Server.Port))
 
 	jwtKey = []byte(cfg.Jwt.Key)
-	http.HandleFunc("/login", Login)
-	http.HandleFunc("/welcome", Welcome)
-	http.HandleFunc("/refresh", Refresh)
+	http.HandleFunc("/login", handleLogin)
+	http.HandleFunc("/refresh", handleRefresh)
+	http.HandleFunc("/test", handleTest)
 
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", cfg.Server.Port), nil))
 }

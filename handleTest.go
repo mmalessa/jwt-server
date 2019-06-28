@@ -11,7 +11,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-func Welcome(w http.ResponseWriter, r *http.Request) {
+func handleTest(w http.ResponseWriter, r *http.Request) {
 
 	auth := r.Header.Get("Authorization")
 	if auth == "" {
@@ -51,7 +51,8 @@ func Welcome(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	fmt.Fprint(w, fmt.Sprintf("Welcome %s!", claims.Username))
-	log.Printf("WELCOME: (%s) Token expires at: %s\n", claims.Username, time.Unix(claims.ExpiresAt, 0))
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	claimsJson, _ := json.Marshal(claims)
+	fmt.Fprint(w, string(claimsJson))
+	log.Printf("TEST: (%s) Token expires at: %s\n", claims.Username, time.Unix(claims.ExpiresAt, 0))
 }
