@@ -18,28 +18,24 @@ type JsonCredentials struct {
 	Username string `json:"username"`
 }
 
-// Create a struct that will be encoded to a JWT.
-// We add jwt.StandardClaims as an embedded type, to provide fields like expiry time
 type Claims struct {
 	Username string `json:"username"`
 	jwt.StandardClaims
 }
 
 var cfg Config
-
 var jwtKey []byte
-
-// var jwtKey = []byte("my_secret_key")
 
 func main() {
 
+	log.Println("Starting JWT Test Server")
 	cfg = *loadConfig("config.yaml")
+	log.Println(fmt.Sprintf("Server port:%d\n", cfg.Server.Port))
 
 	jwtKey = []byte(cfg.Jwt.Key)
 	http.HandleFunc("/login", Login)
 	http.HandleFunc("/welcome", Welcome)
 	http.HandleFunc("/refresh", Refresh)
 
-	// start the server on port 8000
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", cfg.Server.Port), nil))
 }

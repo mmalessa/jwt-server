@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
+	"log"
 
 	"gopkg.in/yaml.v2"
 )
@@ -22,13 +22,13 @@ func loadConfig(location string) *Config {
 
 	yamlFile, err := ioutil.ReadFile(location)
 	if err != nil {
-		fmt.Printf("Load config ERROR  #%v ", err)
+		log.Printf("Load config ERROR  #%v ", err)
 	}
 
 	cfg := &Config{}
 	err = yaml.Unmarshal(yamlFile, cfg)
 	if err != nil {
-		fmt.Printf("Unmarshal ERROR: %v", err)
+		log.Printf("Unmarshal ERROR: %v", err)
 	}
 
 	return cfg
