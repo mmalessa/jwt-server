@@ -49,7 +49,12 @@ func handleLogin(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(ErrorMessage{Code: "500", Message: http.StatusText(500)})
 		return
 	}
-	// w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	fmt.Fprint(w, tokenString)
+
+	response := map[string]string{
+		"token": tokenString,
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	responseM, _ := json.Marshal(response)
+	fmt.Fprint(w, string(responseM))
 	log.Printf("LOGIN:   (%s) Token expires at: %s\n", claims.Username, time.Unix(claims.ExpiresAt, 0))
 }

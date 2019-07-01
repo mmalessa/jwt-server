@@ -20,7 +20,7 @@ go install github.com/mmalessa/jwt-test-server
 # Configuration
 All you need is in config.yaml
 ```yaml
-jwt: 
+jwt:
     key: mySecretKey
     expirationtime: 30 # in minutes
 server:
@@ -42,25 +42,46 @@ credentials:
 ```
 
 ### Response
-200: (string) ">JWT Token string<"  
+200: application/json
+```json
+{
+    "token": "eyJhbGciOiJ*********Tw"
+}
+```
 
 ## GET http://localhost:8000/refresh
 
 ### Header
-`Authorization: "Bearer >JWT Token string<"`  
+`Authorization: "Bearer eyJhbGciOiJ*********Tw"`  
 
 ### Response
-`200: (string) JWT Token string`  
+200: application/json
+```json
+{
+    "token": "eyJhbGciOiJ*********Tw"
+}
+```
 
 ## GET http://localhost:8000/welcome
 
 ### Header
-`Authorization: "Bearer >JWT Token string<?`  
+`Authorization: "Bearer >JWT Token string<`  
 
 ### Response
-`200: (string) "Welcome {username}"`  
+200: application/json
+```json
+{
+    "username": "test",
+    "exp": 1561991616
+}
+```
 
 ## Error Responses
-`400: (json) {"Code":"400","Message":"Bad Request"}`  
-`401: (json) {"Code":"401","Message":"Unauthorized"}`  
-`500: (json) {"Code":"500","Message":"Internal Server Error"}`  
+400, 401, 500: application/json  
+```json
+{
+    "Code": "500",
+    "Message": "Internal Server Error"
+}
+```
+

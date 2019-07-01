@@ -65,7 +65,11 @@ func handleRefresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	fmt.Fprint(w, newTokenString)
+	response := map[string]string{
+		"token": newTokenString,
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	responseM, _ := json.Marshal(response)
+	fmt.Fprint(w, string(responseM))
 	log.Printf("REFRESH: (%s) Token expires at: %s\n", claims.Username, time.Unix(claims.ExpiresAt, 0))
 }
