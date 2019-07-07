@@ -28,6 +28,14 @@ func handleTest(w http.ResponseWriter, r *http.Request) {
 	tkn, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 		return jwtKey, nil
 	})
+	if err != nil {
+		log.Println("INCORRECT TOKEN STRING")
+		// Bad Request
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(401)
+		json.NewEncoder(w).Encode(ErrorMessage{Code: "401", Message: http.StatusText(401)})
+		return
+	}
 
 	if !tkn.Valid {
 		// Unauthorized
